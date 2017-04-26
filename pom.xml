@@ -90,6 +90,11 @@
         <version>4.8.2</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+    <groupId>org.eclipse.jetty</groupId>
+    <artifactId>jetty-server</artifactId>
+    <version>9.3.0.M0</version>
+</dependency>
   </dependencies>
 
   <build>

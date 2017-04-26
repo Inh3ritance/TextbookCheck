@@ -1,14 +1,4 @@
-/**
-    Copyright 2014-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-
-        http://aws.amazon.com/apache2.0/
-
-    or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
 package textbook;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,16 +15,16 @@ import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
 
-import api_call.PAAPI;
+//import api_call.PAAPI;
 import java.util.ArrayList;
 import java.util.List;
-import am.ik.aws.apa.jaxws.Items;
+//import am.ik.aws.apa.jaxws.Items;
 /**
  * This sample shows how to create a simple speechlet for handling speechlet requests.
  */
 public class TextbookCheckSpeechlet implements Speechlet {
     private static final Logger log = LoggerFactory.getLogger(TextbookCheckSpeechlet.class);
-    private PAAPI api_call = new PAAPI();
+    //private PAAPI api_call = new PAAPI();
 
     @Override
     public void onSessionStarted(final SessionStartedRequest request, final Session session)
@@ -108,8 +98,8 @@ public class TextbookCheckSpeechlet implements Speechlet {
      * @return SpeechletResponse spoken and visual response for the given intent
      */
     private SpeechletResponse getHelloResponse() {
-    	List<Items> items = api_call.itemSearch("Everythings an Argument");
-        String speechText = "Hello world" + items.get(0).getItem().get(0).getOfferSummary().getLowestUsedPrice().getFormattedPrice();
+ 
+        String speechText = "Hello world";
 
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
