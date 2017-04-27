@@ -58,7 +58,7 @@ public class AwsApaRequesterImpl implements AwsApaRequester {
         this.endpoint = AwsConfig.getValue("");
         this.accessKeyId = AwsConfig.getValue("");
         this.secretAccessKey = AwsConfig.getValue("");
-        this.associateTag = AwsConfig.getValue("xestrada-20");
+        this.associateTag = AwsConfig.getValue("");
         checkArgs(endpoint, accessKeyId, secretAccessKey, associateTag);
     }
 
