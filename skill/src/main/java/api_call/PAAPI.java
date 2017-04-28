@@ -6,6 +6,7 @@ package api_call;
 //import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -28,11 +29,20 @@ import am.ik.aws.apa.jaxws.Items;
 
 
 public class PAAPI{
-    
+    String keyword = "";
+    List<Items> items = null;
     
     //Add constructor to take keyword
     public PAAPI(){
     	
+    }
+    
+    public void SetKeyword(String value){
+    	keyword = value;
+    }
+    
+    public List<Items> getItemList(){
+    	return items;
     }
 
     //@Test
@@ -53,21 +63,40 @@ public class PAAPI{
         //assertTrue(response.getItems().size() > 0);
     }
     
-    public List<Items> itemSearch(String keyword) throws Exception {
+    public String itemSearch(String keyword) throws IllegalArgumentException {
     	AwsApaRequester requester = new AwsApaRequesterImpl();
         ItemSearchRequest request = new ItemSearchRequest();
         request.setSearchIndex("Books");
-        request.setKeywords(keyword);
+        request.setKeywords("Everythings an Argument");
         request.getResponseGroup().add("OfferSummary");
         request.getResponseGroup().add("Offers");
         System.out.println(request);
         ItemSearchResponse response = requester.itemSearch(request);
-        for(int i = 0; i < 10; i++){
-        	System.out.println(response.getItems().get(0).getItem().get(i).getOfferSummary().getLowestUsedPrice().getFormattedPrice());
+        
+        //Organizes From Lowest Price to Highest
+        Items items = response.getItems().get(0);
+        String FIRST_PRICE = "";
+        String SECOND_PRICE = "";
+        for(int i = 0; i < items.getItem().size(); i++){
+        	if(items.getItem().get(i).getOfferSummary() != null){
+	        	String LOWEST = items.getItem().get(i).getOfferSummary().getLowestUsedPrice() != null 
+	    		? items.getItem().get(i).getOfferSummary().getLowestUsedPrice().getFormattedPrice() 
+	    		: items.getItem().get(i).getOfferSummary().getLowestNewPrice().getFormattedPrice();
+	        	items.getItem().get(i).setLowestPrice(LOWEST);
+        	}
         }
-        if(response.getItems().size() > 0){
-        	return response.getItems();
+        for(int i = 0; i < items.getItem().size(); i++){
+        	for(int j = i + 1; j < items.getItem().size(); j++){		
+				if (Float.parseFloat(items.getItem().get(i).getLowestPrice().replace("$", "")) > Float.parseFloat(items.getItem().get(j).getLowestPrice().replace("$", ""))) {
+					Collections.swap(items.getItem(), i, j);
+					//Item temp = items.getItem().get(j);
+					//items.getItem().set(j, items.getItem().get(i));
+					//items.getItem().set(i, temp);
+				}
+    		}
         }
-        return null;
+        return items.getItem().get(0).getLowestPrice();
     }
+    
+    
 }

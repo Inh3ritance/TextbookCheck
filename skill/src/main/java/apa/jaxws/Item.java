@@ -130,7 +130,7 @@ import javax.xml.bind.annotation.XmlType;
         "relatedItems", "collections", "subjects",
         "variationSummary", "variations", "customerReviews",
         "editorialReviews", "similarProducts", "accessories", "tracks",
-        "browseNodes", "alternateVersions" })
+        "browseNodes", "alternateVersions", "lowestPrice" })
 @XmlRootElement(name = "Item")
 public class Item {
 
@@ -186,6 +186,9 @@ public class Item {
     protected BrowseNodes browseNodes;
     @XmlElement(name = "AlternateVersions")
     protected Item.AlternateVersions alternateVersions;
+    
+    @XmlElement(name = "LowestPrice")
+    protected String lowestPrice;;
 
     /**
      * Gets the value of the asin property.
@@ -193,6 +196,17 @@ public class Item {
      * @return possible object is {@link String }
      * 
      */
+    
+    
+    public void setLowestPrice(String value){
+    	this.lowestPrice = value;
+    }
+    
+    public String getLowestPrice(){
+    	return lowestPrice;
+    }
+    
+    
     public String getASIN() {
         return asin;
     }

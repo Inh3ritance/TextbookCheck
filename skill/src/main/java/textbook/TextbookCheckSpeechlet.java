@@ -19,6 +19,10 @@ import api_call.PAAPI;
 import java.util.ArrayList;
 import java.util.List;
 import am.ik.aws.apa.jaxws.Items;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * This sample shows how to create a simple speechlet for handling speechlet requests.
  */
@@ -98,14 +102,16 @@ public class TextbookCheckSpeechlet implements Speechlet {
      * @return SpeechletResponse spoken and visual response for the given intent
      */
     private SpeechletResponse getHelloResponse() {
+    	String a = "";
     	List<Items> items = null;
-    	try{
-    		items = api_call.itemSearch("Everythings an Argument");
-    	}catch(Exception e){
-    		
-    	}
-        String speechText = "Hello world" + items.get(0).getItem().get(0).getOfferSummary().getLowestUsedPrice().getFormattedPrice();
+	    try{
+	    	a = api_call.itemSearch("Everythings an Argument");
+	    }catch(IllegalArgumentException e){
 
+	    }
+	    
+	    String speechText = "Hello world " + a;
+	    
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
         card.setTitle("HelloWorld");

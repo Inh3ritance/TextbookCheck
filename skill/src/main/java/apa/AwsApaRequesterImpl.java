@@ -55,10 +55,7 @@ public class AwsApaRequesterImpl implements AwsApaRequester {
             .compile("status code ([0-9]{3})");
     //Add product api keys here
     public AwsApaRequesterImpl() throws IllegalArgumentException {
-        this.endpoint = AwsConfig.getValue("");
-        this.accessKeyId = AwsConfig.getValue("");
-        this.secretAccessKey = AwsConfig.getValue("");
-        this.associateTag = AwsConfig.getValue("");
+         //Remember to input amazon keys here
         checkArgs(endpoint, accessKeyId, secretAccessKey, associateTag);
     }
 
@@ -90,7 +87,9 @@ public class AwsApaRequesterImpl implements AwsApaRequester {
             //throw new IllegalArgumentException(name + " is empty.");
         }
     }
-
+    
+    
+    //This is where it gets stuck
     protected AWSECommerceServicePortType preparePort() {
         if (port == null) {
             try {
