@@ -1,10 +1,27 @@
 {
   "intents": [
     {
-      "intent": "HelloWorldIntent"
+      "intent": "TextbookCheck",
+	  
+	  "slots": [ {
+	  
+	  "name": "Book",
+	  
+	  "type": "AMAZON.Book"
+	  
+	  } ]
     },
     {
       "intent": "AMAZON.HelpIntent"
-    }
+    },
+	{
+	  "intent": "AMAZON.NoIntent"
+	},
+	{
+	  "intent": "AMAZON.CancelIntent"
+	},
+	{
+	  "intent": "AMAZON.StopIntent"
+	}
   ]
 }

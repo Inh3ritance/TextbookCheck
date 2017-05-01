@@ -1,7 +1,85 @@
-HelloWorldIntent say hello
-HelloWorldIntent say hello world
-HelloWorldIntent hello
-HelloWorldIntent say hi
-HelloWorldIntent say hi world
-HelloWorldIntent hi
-HelloWorldIntent how are you
+TextbookCheck {Book}
+TextbookCheck find {Book}
+TextbookCheck search {Book}
+TextbookCheck to find me this book {Book}
+TextbookCheck to get {Book}
+TextbookCheck to get me this {Book}
+TextbookCheck to get me this book {Book}
+TextbookCheck to find me {Book}
+TextbookCheck can you find me {Book}
+TextbookCheck can you find me this {Book}
+TextbookCheck can you find me this book {Book}
+TextbookCheck find the lowest price for this book {Book}
+TextbookCheck find the lowest price for {Book}
+TextbookCheck find the lowest price of {Book}
+TextbookCheck to find the lowest price of {Book}
+TextbookCheck to get the lowest price for {Book}
+TextbookCheck get the lowest price for {Book}
+TextbookCheck find the cheapest price for this book {Book}
+TextbookCheck find the cheapest price for {Book}
+TextbookCheck find the cheapest price of {Book}
+TextbookCheck to find the cheapest price of {Book}
+TextbookCheck to get the cheapest price for {Book}
+TextbookCheck get the cheapest price for {Book}
+TextbookCheck find {Book}
+TextbookCheck find me {Book}
+TextbookCheck find me this book {Book}
+TextbookCheck search for me {Book}
+TextbookCheck search for {Book}
+TextbookCheck search me {Book}
+TextbookCheck search for the lowest price {Book}
+TextbookCheck search for the cheapest price {Book}
+TextbookCheck get me this book {Book}
+TextbookCheck get me this {Book}
+TextbookCheck get me {Book}
+TextbookCheck get {Book}
+TextbookCheck get the cheapest price for this {Book}
+TextbookCheck get me the cheapest price of {Book}
+TextbookCheck get cheapest price for {Book}
+TextbookCheck get cheapest price of {Book}
+TextbookCheck to look for {Book}
+TextbookCheck look for {Book}
+TextbookCheck look up {Book}
+TextbookCheck to look up price of {Book}
+TextbookCheck look the price up for {Book}
+TextbookCheck look up the price for {Book}
+TextbookCheck to look up the price for {Book}
+TextbookCheck look for this number {Book}
+TextbookCheck the number is {Book}
+TextbookCheck get the cheapest price for this number {Book}
+TextbookCheck get the cheapest price for this book number {Book}
+TextbookCheck book number is {Book}
+TextbookCheck the book number is {Book}
+TextbookCheck the number for this book is {Book}
+TextbookCheck number for this book is {Book}
+TextbookCheck number of the book is {Book}
+TextbookCheck number of this book is {Book}
+TextbookCheck number of this book {Book}
+TextbookCheck the number for this book is {Book}
+TextbookCheck the number of the book is {Book}
+TextbookCheck the number of this book is {Book}
+TextbookCheck the number of this book {Book}
+TextbookCheck the number follows {Book}
+TextbookCheck look for this {Book} 
+TextbookCheck to look for this number {Book}
+TextbookCheck look for this ISBN {Book}
+TextbookCheck the ISBN is {Book}
+TextbookCheck get the cheapest price for this ISBN {Book}
+TextbookCheck get the cheapest price for this book ISBN {Book}
+TextbookCheck book ISBN is {Book}
+TextbookCheck the ISBN number is {Book}
+TextbookCheck the ISBN for this book is {Book}
+TextbookCheck the ISBN of the book is {Book}
+TextbookCheck the ISBN of this book {Book}
+TextbookCheck the ISBN follows {Book}
+TextbookCheck to look for this ISBN {Book}
+TextbookCheck look for this ISBN number {Book}
+TextbookCheck the ISBN number is {Book}
+TextbookCheck get the cheapest price for this ISBN number {Book}
+TextbookCheck get the cheapest price for this book ISBN number {Book}
+TextbookCheck the ISBN number is {Book}
+TextbookCheck the ISBN number for this book is {Book}
+TextbookCheck the ISBN number of the book is {Book}
+TextbookCheck the ISBN number of this book {Book}
+TextbookCheck the ISBN number follows {Book}
+TextbookCheck to look for this ISBN number {Book}
