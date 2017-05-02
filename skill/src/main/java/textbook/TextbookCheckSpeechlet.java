@@ -1,5 +1,6 @@
 package textbook;
 
+import api_call.PAAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.amazon.speech.slu.Intent;
@@ -17,7 +18,8 @@ import com.amazon.speech.ui.SimpleCard;
 
 public class TextbookCheckSpeechlet implements Speechlet {
     private static final Logger log = LoggerFactory.getLogger(TextbookCheckSpeechlet.class);
-
+    private PAAPI api_call = new PAAPI();
+    
     @Override
     public void onSessionStarted(final SessionStartedRequest request, final Session session)
             throws SpeechletException {
@@ -91,15 +93,8 @@ public class TextbookCheckSpeechlet implements Speechlet {
     }
     
     private SpeechletResponse getTextbookLowestPrice(String textbook) {
-     /*List<Items> items = null;
-     try {
-      items = api_call.itemSearch(textbook);
-     } catch(Exception e){
-       
-     }
-        String speechText = "book is priced at " + items.get(0).getItem().get(0).getOfferSummary().getLowestUsedPrice().getFormattedPrice(); */
-      
-        String speechText = textbook + " this is the book you want.";
+        api_call.setKeyword(textbook);
+        String speechText = api_call.lowestPrice();
       
         SimpleCard card = new SimpleCard();
         card.setTitle("TextbookCheck");
