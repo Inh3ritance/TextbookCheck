@@ -50,7 +50,7 @@ public class AwsApaRequesterImpl implements AwsApaRequester {
     private static final Logger logger = LoggerFactory
             .getLogger(AwsApaRequesterImpl.class);
     private int retryCount = 3;
-    private long retryInterval = 1000; // [msec]
+    private long retryInterval = 100; // [msec]
     private static final Pattern HTTP_STATUS_PATTERN = Pattern
             .compile("status code ([0-9]{3})");
     //Add product api keys here
