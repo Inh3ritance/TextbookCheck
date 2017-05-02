@@ -25,6 +25,7 @@ import am.ik.aws.apa.jaxws.Item;
 import am.ik.aws.apa.jaxws.ItemSearchRequest;
 import am.ik.aws.apa.jaxws.ItemSearchResponse;
 import am.ik.aws.apa.jaxws.Items;
+import am.ik.aws.apa.jaxws.Image;
 
 //Ebay Search API
 import com.ebay.services.client.ClientConfig;
@@ -34,6 +35,7 @@ import com.ebay.services.finding.FindItemsByKeywordsResponse;
 import com.ebay.services.finding.FindingServicePortType;
 import com.ebay.services.finding.PaginationInput;
 import com.ebay.services.finding.SearchItem;
+import com.ebay.services.finding.SortOrderType;
 
 
 
@@ -51,13 +53,31 @@ public class PAAPI{
     String ebayURL = "";
     String finalURL = "";
     
-    //Add constructor to take keyword
+    //Set up Configuration for Each Service
+	AwsApaRequester requester = new AwsApaRequesterImpl();
+	ClientConfig config = new ClientConfig();
+	
+	Image image = null;
+    
     public PAAPI(){
-    	
+
     }
     
     public void setKeyword(String value){
     	keyword = value;
+    }
+    
+    public String getEbayURL(){
+    	return ebayURL;
+    }
+    
+    public String getAmazonURL(){
+    	return amazonURL;
+    }
+    
+    //Returns the Mazon Lowest Price image not eBays!
+    public Image getAmazonImage(){
+    	return image;
     }
     
     public String lowestPrice(){
@@ -66,27 +86,35 @@ public class PAAPI{
     		itemSearchAmazon();
     		itemSearchEbay();
     	}catch(Exception e){
-    		
-    	}finally{
-    		if(lowestAmazon != 0 && lowestEbay != 0){
-    			if(lowestEbay <= lowestAmazon){
-    				a = "I found " + keyword + " for $" + lowestEbay + " on eBay"; 
-    				finalURL = ebayURL; 
-    			}else{
-    				a = "I found " + keyword + " for $" + lowestEbay + " on Amazon"; 
-    				finalURL = ebayURL;
-    			}
+    		System.out.println(e);
+    	}
+    	System.out.println(lowestEbay);
+    	System.out.println(lowestAmazon);
+    	if(lowestAmazon != 0 && lowestEbay != 0){
+    		if(lowestEbay <= lowestAmazon){
+    			a = "I found " + keyword + " for $" + lowestEbay + " on eBay"; 
+    			finalURL = ebayURL; 
+    		}else{
+    			a = "I found " + keyword + " for $" + lowestAmazon + " on Amazon"; 
+    			finalURL = ebayURL;
     		}
+    	}else if(lowestEbay != 0){
+			a = "I found " + keyword + " for $" + lowestEbay + " on eBay"; 
+			finalURL = ebayURL; 
+    	}else if(lowestAmazon != 0){
+			a = "I found " + keyword + " for $" + lowestAmazon + " on Amazon"; 
+			finalURL = ebayURL;
+    	}else{
+    		a = "I could not find that book, please try again";
     	}
     	
     	return a;
     }
 
 
-    
     public void itemSearchAmazon() throws IllegalArgumentException {
     	lowestAmazon = 0;
-    	AwsApaRequester requester = new AwsApaRequesterImpl();
+    	
         ItemSearchRequest request = new ItemSearchRequest();
         request.setSearchIndex("Books");
         request.setKeywords(keyword);
@@ -99,6 +127,7 @@ public class PAAPI{
         String FIRST_PRICE = "";
         String SECOND_PRICE = "";
         //Determines if new or low price is lowest
+        //System.out.println(items.getItem().size());
         for(int i = 0; i < items.getItem().size(); i++){
         	if(items.getItem().get(i).getOfferSummary() != null){
 	        	String LOWEST = items.getItem().get(i).getOfferSummary().getLowestUsedPrice() != null 
@@ -116,9 +145,10 @@ public class PAAPI{
         }
         
         for(int i = 0; i < items.getItem().size(); i++){
-        	if(Double.parseDouble(items.getItem().get(i).getLowestPrice().replace("$", "")) > 1.00){
+        	if(Double.parseDouble(items.getItem().get(i).getLowestPrice().replace("$", "")) > 2.00){
         		lowestAmazon = Double.parseDouble(items.getItem().get(i).getLowestPrice().replace("$", ""));
         		amazonURL = items.getItem().get(i).getDetailPageURL();
+        		image = items.getItem().get(i).getMediumImage();
         		break;
         	}
         }
@@ -127,12 +157,13 @@ public class PAAPI{
     public void itemSearchEbay() throws Exception{
     	lowestEbay = 0;
     	// initialize service end-point configuration
-    	ClientConfig config = new ClientConfig();
+    	
     	// endpoint address can be overwritten here, by default, production address is used,
     	// to enable sandbox endpoint, just uncomment the following line
     	//config.setEndPointAddress("http://svcs.sandbox.ebay.com/services/search/FindingService/v1");
     	config.setApplicationId("JorgeEst-AlexaTex-PRD-a090fc79c-39149f17");
-
+    	config.setSoapMessageLoggingEnabled(false);
+    	config.setHttpHeaderLoggingEnabled(false);
     	//create a service client
         FindingServicePortType serviceClient = FindingServiceClientFactory.getServiceClient(config);
         
@@ -140,6 +171,7 @@ public class PAAPI{
         FindItemsByKeywordsRequest request = new FindItemsByKeywordsRequest();
         //set request parameters
         request.setKeywords(keyword);
+        request.setSortOrder(SortOrderType.BEST_MATCH);
         PaginationInput pi = new PaginationInput();
         pi.setEntriesPerPage(10);
         
@@ -149,8 +181,8 @@ public class PAAPI{
         FindItemsByKeywordsResponse result = serviceClient.findItemsByKeywords(request);
         
         //output result
-        System.out.println("Ack = "+result.getAck());
-        System.out.println("Find " + result.getSearchResult().getCount() + " items." );
+        //System.out.println("Ack = "+result.getAck());
+        //System.out.println("Find " + result.getSearchResult().getCount() + " items." );
         ebayItems = result.getSearchResult().getItem();
         if(ebayItems.get(0) != null 
         && ebayItems.get(0).getSellingStatus() != null 
@@ -158,9 +190,10 @@ public class PAAPI{
         	lowestEbay = ebayItems.get(0).getSellingStatus().getConvertedCurrentPrice().getValue();
         }
         for(SearchItem item : ebayItems) {
-        	System.out.println(item.getTitle() + " " + item.getSellingStatus().getConvertedCurrentPrice().getValue());
+        	//System.out.println(item.getTitle() + " " + item.getSellingStatus().getConvertedCurrentPrice().getValue());
         	if(item.getSellingStatus() != null 
-        	&& item.getSellingStatus().getConvertedCurrentPrice() != null 
+        	&& item.getSellingStatus().getConvertedCurrentPrice() != null
+        	&& item.getPrimaryCategory().getCategoryName().toLowerCase().contains("book")
         	&& item.getSellingStatus().getConvertedCurrentPrice().getValue() < lowestEbay){
         		lowestEbay = item.getSellingStatus().getConvertedCurrentPrice().getValue();
         		ebayURL = item.getViewItemURL();

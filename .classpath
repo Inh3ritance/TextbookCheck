@@ -18,5 +18,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="skill/lib/finding.jar"/>
 	<classpathentry kind="lib" path="skill/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="skill/wsdl/FindingService.wsdl"/>
+	<classpathentry kind="lib" path="skill/src/main/java/com/ebay/common/FindingService.wsdl"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

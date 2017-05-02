@@ -61,16 +61,17 @@ public class ClientFactory {
 		
 		// wsdl is in the same package as the service client
 		String wsdlLocation = serviceClient.getAnnotation(WebServiceClient.class).wsdlLocation();
-	    URL wsdlUrl = serviceClient.getResource(wsdlLocation);
-	    
+		//System.out.println(wsdLocation);
+		URL wsdlUrl = new ClientFactory().getClass().getClassLoader().getResource(wsdlLocation);
+
 	    if (wsdlUrl == null) {
 	    	logger.error("Can not find wsdl on specified location: " + wsdlLocation);
 	    	throw new RuntimeException("can not find wsdl on specified location: " + wsdlLocation);
 	    }
 	    
 	    logger.debug("begin to create service instance ... ");
-	    logger.debug("wsdl : " + wsdlUrl.toString());
-	    logger.debug("service : " + serviceQName.toString());
+	    //logger.debug("wsdl : " + wsdlUrl.toString());
+	    //logger.debug("service : " + serviceQName.toString());
 	    
 	    // Service objects provide the client view of a Web service.
 	    // can be used to create proxy for a target service endpoint
