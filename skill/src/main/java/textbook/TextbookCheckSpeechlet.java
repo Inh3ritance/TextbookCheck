@@ -96,14 +96,14 @@ public class TextbookCheckSpeechlet implements Speechlet {
         api_call.setKeyword(textbook);
         String speechText = api_call.lowestPrice();
       
-        SimpleCard card = new SimpleCard();
-        card.setTitle("TextbookCheck");
-        card.setContent(speechText);
+        SimpleCard a = new SimpleCard();
+        a.setTitle("Book Info");
+        a.setContent("Amazon Title: " + api_call.getAmazonTitle() + "\n" + "Price: $" + api_call.getAmazonPrice() + "\n" + "URL: " + api_call.getAmazonURL() + "\n\n" +  "eBay Title: " + api_call.getEbayTitle() + "\n" + "Price: $" + api_call.getEbayPrice() + "\n" + "URL: " + api_call.getEbayURL());
 
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
 
-        return SpeechletResponse.newTellResponse(speech, card);
+        return SpeechletResponse.newTellResponse(speech, a);
     }
 
 }

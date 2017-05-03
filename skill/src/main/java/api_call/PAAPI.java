@@ -41,6 +41,8 @@ import com.ebay.services.finding.SortOrderType;
 
 public class PAAPI{
     String keyword = "";
+    String eBayKeyword = "";
+    String amazonKeyword = "";
     //List of Amazon items
     List<Items> amazonItems = null;
     List<SearchItem> ebayItems = null;
@@ -51,7 +53,7 @@ public class PAAPI{
     //URL for each lowest item
     String amazonURL = "";
     String ebayURL = "";
-    String finalURL = "";
+
     
     //Set up Configuration for Each Service
 	AwsApaRequester requester = new AwsApaRequesterImpl();
@@ -75,38 +77,80 @@ public class PAAPI{
     	return amazonURL;
     }
     
+    public String getEbayTitle(){
+    	return eBayKeyword;
+    }
+    
+    public String getAmazonTitle(){
+    	return amazonKeyword;
+    }
+    
+    public String getAmazonPrice(){
+    	String h = "" + lowestAmazon;
+    	if(h.length() <= 3){
+    		h += "0";
+    	}
+    	
+    	return h;
+    }
+    
+    public String getEbayPrice(){
+    	String h = "" + lowestEbay;
+    	if(h.length() <= 3){
+    		h += "0";
+    	}
+    	
+    	return h;
+    }
+    
+    
+    
     //Returns the Mazon Lowest Price image not eBays!
     public Image getAmazonImage(){
     	return image;
     }
     
+    public boolean isISBN(){
+	    try{  
+	    	double d = Double.parseDouble(keyword);  
+	    }  
+	    catch(NumberFormatException nfe)  {  
+	    	return false;  
+	    }  
+	    return true;
+    }
+    
     public String lowestPrice(){
     	String a = "";
+    	String eBay = "";
+    	String amazon = "";
     	try{
     		itemSearchAmazon();
     		itemSearchEbay();
     	}catch(Exception e){
     		System.out.println(e);
     	}
+    	eBay = (lowestEbay*100)%10 == 0 ? "0 on eBay." : " on eBay.";
+    	amazon = (lowestAmazon*100)%10 == 0 ? "0 on Amazon." : " on Amazon.";
     	System.out.println(lowestEbay);
     	System.out.println(lowestAmazon);
+    	
+    	
     	if(lowestAmazon != 0 && lowestEbay != 0){
     		if(lowestEbay <= lowestAmazon){
-    			a = "I found " + keyword + " for $" + lowestEbay + " on eBay"; 
-    			finalURL = ebayURL; 
+    			a = "I found " + eBayKeyword + " for $" + lowestEbay + eBay;  
     		}else{
-    			a = "I found " + keyword + " for $" + lowestAmazon + " on Amazon"; 
-    			finalURL = ebayURL;
+    			a = "I found " + amazonKeyword + " for $" + lowestAmazon + amazon; 
     		}
     	}else if(lowestEbay != 0){
-			a = "I found " + keyword + " for $" + lowestEbay + " on eBay"; 
-			finalURL = ebayURL; 
+			a = "I found " + eBayKeyword + " for $" + lowestEbay + eBay; 
     	}else if(lowestAmazon != 0){
-			a = "I found " + keyword + " for $" + lowestAmazon + " on Amazon"; 
-			finalURL = ebayURL;
+			a = "I found " + amazonKeyword + " for $" + lowestAmazon + amazon; 
     	}else{
-    		a = "I could not find that book, please try again";
+    		a = "I could not find that book.";
     	}
+    	
+    	a += " Do you want to search for another book?";
     	
     	return a;
     }
@@ -119,7 +163,8 @@ public class PAAPI{
         request.setSearchIndex("Books");
         request.setKeywords(keyword);
         request.getResponseGroup().add("OfferSummary");
-        request.getResponseGroup().add("Offers");
+        request.getResponseGroup().add("ItemAttributes");
+        
         ItemSearchResponse response = requester.itemSearch(request);
         
         //Organizes From Lowest Price to Highest
@@ -149,6 +194,7 @@ public class PAAPI{
         		lowestAmazon = Double.parseDouble(items.getItem().get(i).getLowestPrice().replace("$", ""));
         		amazonURL = items.getItem().get(i).getDetailPageURL();
         		image = items.getItem().get(i).getMediumImage();
+        		amazonKeyword = isISBN() ? items.getItem().get(i).getItemAttributes().getTitle() : keyword;
         		break;
         	}
         }
@@ -197,6 +243,7 @@ public class PAAPI{
         	&& item.getSellingStatus().getConvertedCurrentPrice().getValue() < lowestEbay){
         		lowestEbay = item.getSellingStatus().getConvertedCurrentPrice().getValue();
         		ebayURL = item.getViewItemURL();
+        		eBayKeyword = isISBN() ? item.getTitle() : keyword;
         	}
         }
     }

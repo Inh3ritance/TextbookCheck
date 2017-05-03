@@ -55,7 +55,7 @@ public class AwsApaRequesterImpl implements AwsApaRequester {
             .compile("status code ([0-9]{3})");
     //Add product api keys here
     public AwsApaRequesterImpl() throws IllegalArgumentException {
-//Insert hey here
+    	//Inset keys
         checkArgs(endpoint, accessKeyId, secretAccessKey, associateTag);
     }
 
