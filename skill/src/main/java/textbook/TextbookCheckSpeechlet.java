@@ -77,11 +77,11 @@ public class TextbookCheckSpeechlet implements Speechlet {
     }
 
     private SpeechletResponse getHelpResponse() {
-        String speechText = "Say the name or ISBN of a textbook and I will tell you the cheapest price available on Amazon.";
+        String speechText = "Say the name or ISBN of a textbook and I will try to find the lowest price available on Amazon or eBay.";
 
-        SimpleCard card = new SimpleCard();
-        card.setTitle("Help");
-        card.setContent(speechText);
+        //SimpleCard card = new SimpleCard();
+        //card.setTitle("Help");
+        //card.setContent(speechText);
 
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
@@ -89,21 +89,24 @@ public class TextbookCheckSpeechlet implements Speechlet {
         Reprompt reprompt = new Reprompt();
         reprompt.setOutputSpeech(speech);
 
-        return SpeechletResponse.newAskResponse(speech, reprompt, card);
+        return SpeechletResponse.newAskResponse(speech, reprompt);
     }
     
     private SpeechletResponse getTextbookLowestPrice(String textbook) {
         api_call.setKeyword(textbook);
         String speechText = api_call.lowestPrice();
-      
+        
+        String card = api_call.getCardInfo();
         SimpleCard a = new SimpleCard();
         a.setTitle("Book Info");
-        a.setContent("Amazon Title: " + api_call.getAmazonTitle() + "\n" + "Price: $" + api_call.getAmazonPrice() + "\n" + "URL: " + api_call.getAmazonURL() + "\n\n" +  "eBay Title: " + api_call.getEbayTitle() + "\n" + "Price: $" + api_call.getEbayPrice() + "\n" + "URL: " + api_call.getEbayURL());
+        a.setContent(card);
 
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
-
-        return SpeechletResponse.newTellResponse(speech, a);
+        if(!card.isEmpty()){
+        	return SpeechletResponse.newTellResponse(speech, a);
+        }
+        return SpeechletResponse.newTellResponse(speech);
     }
 
 }

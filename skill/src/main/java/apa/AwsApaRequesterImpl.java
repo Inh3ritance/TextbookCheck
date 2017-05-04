@@ -55,7 +55,10 @@ public class AwsApaRequesterImpl implements AwsApaRequester {
             .compile("status code ([0-9]{3})");
     //Add product api keys here
     public AwsApaRequesterImpl() throws IllegalArgumentException {
-    	//Inset keys
+        this.endpoint = AwsConfig.getValue("https://webservices.amazon.com");
+        this.accessKeyId = AwsConfig.getValue("Insert Amazon Access Key");
+        this.secretAccessKey = AwsConfig.getValue("Insert Secret Access Key");
+        this.associateTag = AwsConfig.getValue("Insert Associate Tag");
         checkArgs(endpoint, accessKeyId, secretAccessKey, associateTag);
     }
 

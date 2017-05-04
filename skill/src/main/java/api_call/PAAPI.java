@@ -87,7 +87,7 @@ public class PAAPI{
     
     public String getAmazonPrice(){
     	String h = "" + lowestAmazon;
-    	if(h.length() <= 3){
+    	if(h.charAt(h.length() - 2) == '.'){
     		h += "0";
     	}
     	
@@ -96,11 +96,25 @@ public class PAAPI{
     
     public String getEbayPrice(){
     	String h = "" + lowestEbay;
-    	if(h.length() <= 3){
+    	if(h.charAt(h.length() - 2) == '.'){
     		h += "0";
     	}
     	
     	return h;
+    }
+    
+    public String getCardInfo(){
+    	String cardText = "";
+    	//System.out.println(amazonURL + " " + amazonKeyword + " " + lowestAmazon);
+    	if(!amazonURL.isEmpty() && !amazonKeyword.isEmpty() && lowestAmazon != 0){
+    		cardText = "Amazon Book Title: " + amazonKeyword + "\n" + "Price: $" + getAmazonPrice() + "\n URL: " + amazonURL;
+    		cardText += "\n \n";
+    	}
+
+    	if(!ebayURL.equals("") && !eBayKeyword.equals("") && lowestEbay != 0){
+    		cardText += "eBay Book Title: " + eBayKeyword + "\n" + "Price: $" + getEbayPrice() + "\n URL: " + ebayURL;
+    	}
+    	return cardText;
     }
     
     
@@ -122,35 +136,32 @@ public class PAAPI{
     
     public String lowestPrice(){
     	String a = "";
-    	String eBay = "";
-    	String amazon = "";
     	try{
     		itemSearchAmazon();
     		itemSearchEbay();
     	}catch(Exception e){
     		System.out.println(e);
     	}
-    	eBay = (lowestEbay*100)%10 == 0 ? "0 on eBay." : " on eBay.";
-    	amazon = (lowestAmazon*100)%10 == 0 ? "0 on Amazon." : " on Amazon.";
-    	System.out.println(lowestEbay);
-    	System.out.println(lowestAmazon);
-    	
-    	
-    	if(lowestAmazon != 0 && lowestEbay != 0){
-    		if(lowestEbay <= lowestAmazon){
-    			a = "I found " + eBayKeyword + " for $" + lowestEbay + eBay;  
-    		}else{
-    			a = "I found " + amazonKeyword + " for $" + lowestAmazon + amazon; 
-    		}
-    	}else if(lowestEbay != 0){
-			a = "I found " + eBayKeyword + " for $" + lowestEbay + eBay; 
-    	}else if(lowestAmazon != 0){
-			a = "I found " + amazonKeyword + " for $" + lowestAmazon + amazon; 
+    	String card = getCardInfo();
+    	if(!card.isEmpty()){
+	    	if(lowestAmazon != 0 && lowestEbay != 0){
+	    		if(lowestEbay <= lowestAmazon){
+	    			a = "I found " + eBayKeyword + " for $" + getEbayPrice() + " on eBay.";  
+	    		}else{
+	    			a = "I found " + amazonKeyword + " for $" + getAmazonPrice() + " on Amazon."; 
+	    		}
+	    	}else if(lowestEbay != 0){
+				a = "I found " + eBayKeyword + " for $" + getEbayPrice() + " on eBay."; 
+	    	}else if(lowestAmazon != 0){
+				a = "I found " + amazonKeyword + " for $" + getAmazonPrice() + " on Amazon." ; 
+	    	}else{
+	    		a = "I could not find that book.";
+	    	}
     	}else{
     		a = "I could not find that book.";
     	}
-    	
-    	a += " Do you want to search for another book?";
+    	//Implement Later
+    	//a += " Do you want to search for another book?";
     	
     	return a;
     }
@@ -194,7 +205,7 @@ public class PAAPI{
         		lowestAmazon = Double.parseDouble(items.getItem().get(i).getLowestPrice().replace("$", ""));
         		amazonURL = items.getItem().get(i).getDetailPageURL();
         		image = items.getItem().get(i).getMediumImage();
-        		amazonKeyword = isISBN() ? items.getItem().get(i).getItemAttributes().getTitle() : keyword;
+        		amazonKeyword = items.getItem().get(i).getItemAttributes().getTitle() != null ? items.getItem().get(i).getItemAttributes().getTitle() : keyword;
         		break;
         	}
         }
@@ -207,7 +218,7 @@ public class PAAPI{
     	// endpoint address can be overwritten here, by default, production address is used,
     	// to enable sandbox endpoint, just uncomment the following line
     	//config.setEndPointAddress("http://svcs.sandbox.ebay.com/services/search/FindingService/v1");
-    	config.setApplicationId("JorgeEst-AlexaTex-PRD-a090fc79c-39149f17");
+    	config.setApplicationId("Insert Production or Sandbox Key (eBay Developer Application Key)");
     	config.setSoapMessageLoggingEnabled(false);
     	config.setHttpHeaderLoggingEnabled(false);
     	//create a service client
@@ -243,7 +254,7 @@ public class PAAPI{
         	&& item.getSellingStatus().getConvertedCurrentPrice().getValue() < lowestEbay){
         		lowestEbay = item.getSellingStatus().getConvertedCurrentPrice().getValue();
         		ebayURL = item.getViewItemURL();
-        		eBayKeyword = isISBN() ? item.getTitle() : keyword;
+        		eBayKeyword = item.getTitle() != null ? item.getTitle() : keyword;
         	}
         }
     }
