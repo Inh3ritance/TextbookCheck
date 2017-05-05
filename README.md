@@ -1,9 +1,9 @@
 # Textbook Check Alexa Skill
 
-#Concept
+## Concept
 An AWS lambda function that attempts to find the lowest price of textbook.
 
-#Requirements
+## Requirements
 -JDK: 8
 -Maven
 -eBay developer Account
