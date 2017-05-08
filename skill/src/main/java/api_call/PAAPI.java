@@ -59,6 +59,7 @@ public class PAAPI{
 	AwsApaRequester requester = new AwsApaRequesterImpl();
 	ClientConfig config = new ClientConfig();
 	
+	//
 	Image image = null;
     
     public PAAPI(){
@@ -105,7 +106,6 @@ public class PAAPI{
     
     public String getCardInfo(){
     	String cardText = "";
-    	//System.out.println(amazonURL + " " + amazonKeyword + " " + lowestAmazon);
     	if(!amazonURL.isEmpty() && !amazonKeyword.isEmpty() && lowestAmazon != 0){
     		cardText = "Amazon Book Title: " + amazonKeyword + "\n" + "Price: $" + getAmazonPrice() + "\n URL: " + amazonURL;
     		cardText += "\n \n";
@@ -119,7 +119,7 @@ public class PAAPI{
     
     
     
-    //Returns the Mazon Lowest Price image not eBays!
+    //Returns the Amazon Lowest Price image not eBays!
     public Image getAmazonImage(){
     	return image;
     }
@@ -146,14 +146,14 @@ public class PAAPI{
     	if(!card.isEmpty()){
 	    	if(lowestAmazon != 0 && lowestEbay != 0){
 	    		if(lowestEbay <= lowestAmazon){
-	    			a = "I found " + eBayKeyword + " for $" + getEbayPrice() + " on eBay.";  
+	    			a = "I found " + eBayKeyword + " for $" + getEbayPrice();  
 	    		}else{
-	    			a = "I found " + amazonKeyword + " for $" + getAmazonPrice() + " on Amazon."; 
+	    			a = "I found " + amazonKeyword + " for $" + getAmazonPrice(); 
 	    		}
 	    	}else if(lowestEbay != 0){
-				a = "I found " + eBayKeyword + " for $" + getEbayPrice() + " on eBay."; 
+				a = "I found " + eBayKeyword + " for $" + getEbayPrice(); 
 	    	}else if(lowestAmazon != 0){
-				a = "I found " + amazonKeyword + " for $" + getAmazonPrice() + " on Amazon." ; 
+				a = "I found " + amazonKeyword + " for $" + getAmazonPrice(); 
 	    	}else{
 	    		a = "I could not find that book.";
 	    	}
@@ -218,7 +218,7 @@ public class PAAPI{
     	// endpoint address can be overwritten here, by default, production address is used,
     	// to enable sandbox endpoint, just uncomment the following line
     	//config.setEndPointAddress("http://svcs.sandbox.ebay.com/services/search/FindingService/v1");
-    	config.setApplicationId("Insert Production or Sandbox Key (eBay Developer Application Key)");
+    	config.setApplicationId("JorgeEst-AlexaTex-PRD-a090fc79c-39149f17");
     	config.setSoapMessageLoggingEnabled(false);
     	config.setHttpHeaderLoggingEnabled(false);
     	//create a service client
@@ -237,9 +237,6 @@ public class PAAPI{
         //call service
         FindItemsByKeywordsResponse result = serviceClient.findItemsByKeywords(request);
         
-        //output result
-        //System.out.println("Ack = "+result.getAck());
-        //System.out.println("Find " + result.getSearchResult().getCount() + " items." );
         ebayItems = result.getSearchResult().getItem();
         if(ebayItems.get(0) != null 
         && ebayItems.get(0).getSellingStatus() != null 
