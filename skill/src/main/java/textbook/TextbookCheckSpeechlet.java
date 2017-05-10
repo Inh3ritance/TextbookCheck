@@ -32,7 +32,7 @@ public class TextbookCheckSpeechlet implements Speechlet {
             throws SpeechletException {
         log.info("onLaunch requestId={}, sessionId={}", request.getRequestId(),
                 session.getSessionId());
-        return getHelpResponse();
+        return getLaunchResponse();
     }
 
     @Override
@@ -45,10 +45,11 @@ public class TextbookCheckSpeechlet implements Speechlet {
         String intentName = (intent != null) ? intent.getName() : null;
         
         if("TextbookCheck".equals(intentName)){
-          String bookslot = intent.getSlot("Book").getValue();
-          return getTextbookLowestPrice(bookslot);
-        } else if("AMAZON.NoIntent".equals(intentName) || "AMAZON.CancelIntent".equals(intentName) || "AMAZON.StopIntent".equals(intentName)){
+          return getTextbookLowestPrice(intent.getSlot("Book").getValue());
+        } else if("AMAZON.StopIntent".equals(intentName) || "AMAZON.CancelIntent".equals(intentName) || "AMAZON.NoIntent".equals(intentName)){
           return getGoodbyeResponse();
+        } else if("AMAZON.YesIntent".equals(intentName)){
+          return getLaunchResponse();
         } else if("AMAZON.HelpIntent".equals(intentName)){
           return getHelpResponse();
         } else {
@@ -76,13 +77,21 @@ public class TextbookCheckSpeechlet implements Speechlet {
       return SpeechletResponse.newTellResponse(speech, card);
     }
 
+    private SpeechletResponse getLaunchResponse() {
+        String speechText = "Say the name or ISBN of a textbook and I will try to find the lowest price available online.";
+        
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+        
+        Reprompt reprompt = new Reprompt();
+        reprompt.setOutputSpeech(speech);
+
+        return SpeechletResponse.newAskResponse(speech, reprompt);
+    }
+    
     private SpeechletResponse getHelpResponse() {
-        String speechText = "Say the name or ISBN of a textbook and I will try to find the lowest price available on Amazon or eBay.";
-
-        //SimpleCard card = new SimpleCard();
-        //card.setTitle("Help");
-        //card.setContent(speechText);
-
+        String speechText = "To use this skill say text book check followed by the book name or ISBN to search for a book, say help to get guidance on how to use this skill, say cancel or stop to end the session. Would you like to find a book? Say yes or no.";
+        
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
         
@@ -104,7 +113,7 @@ public class TextbookCheckSpeechlet implements Speechlet {
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
         if(!card.isEmpty()){
-        	return SpeechletResponse.newTellResponse(speech, a);
+         return SpeechletResponse.newTellResponse(speech, a);
         }
         return SpeechletResponse.newTellResponse(speech);
     }
