@@ -45,11 +45,12 @@ public class TextbookCheckSpeechlet implements Speechlet {
         String intentName = (intent != null) ? intent.getName() : null;
         
         if("TextbookCheck".equals(intentName)){
-          return getTextbookLowestPrice(intent.getSlot("Book").getValue());
+          String bookslot = intent.getSlot("Book").getValue();
+          return getTextbookLowestPrice(bookslot);
         } else if("AMAZON.StopIntent".equals(intentName) || "AMAZON.CancelIntent".equals(intentName) || "AMAZON.NoIntent".equals(intentName)){
           return getGoodbyeResponse();
         } else if("AMAZON.YesIntent".equals(intentName)){
-          return getLaunchResponse();
+          return getYesResponse();
         } else if("AMAZON.HelpIntent".equals(intentName)){
           return getHelpResponse();
         } else {
@@ -77,6 +78,18 @@ public class TextbookCheckSpeechlet implements Speechlet {
       return SpeechletResponse.newTellResponse(speech, card);
     }
 
+    private SpeechletResponse getYesResponse() {
+        String speechText = "Say the name or ISBN of a textbook and I will try to find the lowest price available online.";
+        
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+        
+        Reprompt reprompt = new Reprompt();
+        reprompt.setOutputSpeech(speech);
+
+        return SpeechletResponse.newAskResponse(speech, reprompt);
+    }
+    
     private SpeechletResponse getLaunchResponse() {
         String speechText = "Say the name or ISBN of a textbook and I will try to find the lowest price available online.";
         
