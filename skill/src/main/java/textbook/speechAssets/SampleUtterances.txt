@@ -1,4 +1,3 @@
-TextbookCheck {Book}
 TextbookCheck find {Book}
 TextbookCheck search {Book}
 TextbookCheck to find me this book {Book}
