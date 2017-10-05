@@ -6,10 +6,10 @@ Winner of Amazon Hack-Your-World Challenge
 https://developer.amazon.com/blogs/alexa/post/48320451-212c-45a2-8b56-f33ba4cd270f/students-improve-sustainability-and-accessibility-with-alexa
 
 ## Requirements
--JDK: 8
--Maven
--eBay developer Account
--Amazon Affiliate Account
+- JDK: 8
+- Maven
+- eBay developer Account
+- Amazon Affiliate Account
 
 
 
